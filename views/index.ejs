@@ -3,7 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/stylesheets/jquery.mobile.min.css">
-    <link rel="stylesheet" href="/stylesheets/index.css">
+    <link rel="stylesheet" href="/stylesheets/index.css">    
     <script src="/javascripts/jquery-1.11.3.min.js"></script>
     <script src="/javascripts/jquery.mobile-1.4.5.min.js"></script>
     <script src="/javascripts/socket.io.js"></script>
@@ -17,27 +17,92 @@
 
   </head>
 <body>
-<!-- 메인화면 -->
-<div data-role="page" id="mainpage">
-    <div class="mainhead" data-role="header" data-position="fixed">
-
-        <h1>궁금하면 물어보세요! </h1>
+<!-- 메인화면1 질문들-->
+<div data-role="page" id="mainpage1">
+    <div class="mainhead" data-role="header" data-position="fixed"> <h1>궁금하면 물어보세요! </h1>
         <a href="#myinfo" class="ui-btn ui-btn-right ui-corner-all ui-shadow" data-transition="slide">My</a>
         <div data-role="navbar">
             <ul>
                 <li><a href="#">궁금해요</a></li>
+                <li><a href="#mainpage2">적립랭킹</a></li>
+                <li><a href="#mainpage3">기프티콘샵</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div data-role="main" class="ui-content">
+
+
+
+<div style="float:left;width:100px;border-right:1px solid black;height:300px;padding:10px;overflow:scroll-y;">
+    <b>ROOMS</b>
+
+    <div><button id='saero' type='submit'>새로고침</button>></div>
+    <div>
+        <input id="name_data" style="width:100px;" />
+        <input id="namename" type='button' value="닉네임입력" />
+    </div>
+
+    <div id='rooms'></div>
+</div>
+
+
+<div>
+    <input id="bang_data" style="width:200px;" />
+    <input id="bang" type='button' value="방만들기" />
+    <button id='dede' type='submit'>방지울래?</button>
+</div>
+
+
+<div style="float:left;width:300px;height:250px;overflow:scroll-y;padding:10px;">
+    <div id="conversation"></div>
+    <input id="data" style="width:200px;" />
+    <input type="button" id="datasend" value="send" />
+</div>
+
+
+        
+    </div>
+</div>
+
+
+<!-- 메인화면2 적립금랭킹-->
+<div data-role="page" id="mainpage2">
+    <div class="mainhead" data-role="header" data-position="fixed"> <h1>궁금하면 물어보세요! </h1>
+        <a href="#myinfo" class="ui-btn ui-btn-right ui-corner-all ui-shadow" data-transition="slide">My</a>
+        <div data-role="navbar">
+            <ul>
+                <li><a href="#mainpage1">궁금해요</a></li>
                 <li><a href="#">적립랭킹</a></li>
+                <li><a href="#mainpage3">기프티콘샵</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <div data-role="main" class="ui-content">
+        2번창 
+    </div>
+</div>
+
+<!-- 메인화면3 기프티콘샵-->
+<div data-role="page" id="mainpage3">
+    <div class="mainhead" data-role="header" data-position="fixed"> <h1>궁금하면 물어보세요! </h1>
+        <a href="#myinfo" class="ui-btn ui-btn-right ui-corner-all ui-shadow" data-transition="slide">My</a>
+        <div data-role="navbar">
+            <ul>
+                <li><a href="#mainpage1">궁금해요</a></li>
+                <li><a href="#mainpage2">적립랭킹</a></li>
                 <li><a href="#">기프티콘샵</a></li>
             </ul>
         </div>
     </div>
+    
     <div data-role="main" class="ui-content">
-        <b>Send message</b><p>
-        Message  <input type="text" id="msgbox"/>
-        <br>
-        <span id="msgs"></span>
+        3번창 
     </div>
 </div>
+
+
 
 
 <!-- 회원정보 -->
