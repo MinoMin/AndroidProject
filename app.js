@@ -13,8 +13,6 @@ var mysql = require('mysql');
 var session = require('express-session');
 
 
-
-
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
@@ -73,6 +71,7 @@ transporter.sendMail(mailOptions, function(error, info){
    // header.sendJSON(result, res);
 });  
 });
+
 
 
 // 이메일 중복 체크 
@@ -174,7 +173,6 @@ connection.end();
 
 
 // 회원정보 가입하며 넣기
-
 app.post('/singupuser',function(req,res){
 var connection = mysql.createConnection({
   host : 'localhost',
@@ -220,7 +218,7 @@ connection.end();
 
 
 
-// 여기서부터 두영이 채팅
+// 채팅서버
 
 var usernames = {};
 // rooms which are currently available in chat
@@ -270,8 +268,11 @@ io.sockets.on('connection', function (socket) {
 /////////////////////////// 내가만듦
   socket.on('duduman', function(){
     //io.sockets.manager.rooms;
-    for(var i=0; i<rooms.length+1;i++){
-      socket.emit('updaterooms', rooms, rooms[i]);
+    for(var i=0; i<rooms.length+100;i++){
+      if(rooms[i] == null){
+        delete rooms[i];
+        socket.emit('updaterooms', rooms, rooms[i]);
+       }
   }
   });
 
@@ -340,14 +341,13 @@ io.sockets.on('connection', function (socket) {
 
 
   //방지울때 
-  socket.on('jiu', function(){
+    socket.on('jiu', function(){
     for(var i=0; i < rooms.length+1; i++){
       if(rooms[i] == socket.room){
-        alert('진짜 지운다?');
+        //alert('진짜 지운다?');
         delete rooms[i];
-        //socket.leave(rooms[i]);
+        socket.emit('updaterooms', rooms, rooms[i]);
       }
-      socket.emit('updaterooms', rooms, rooms[i]);
     }
   });
 
@@ -366,14 +366,9 @@ io.sockets.on('connection', function (socket) {
     // echo globally that this client has left
     socket.broadcast.to(socket.room).emit('updatechat', 'SERVER', socket.username + ' has disconnected');
     //socket.broadcast.emit('updatechat', 'SERVER', socket.username + ' has disconnected');
+    
     socket.leave(socket.room);
-    for(var i=0; i < rooms.length+1; i++){
-      if(rooms[i] == socket.room){
-        delete rooms[i];
-        socket.leave(rooms[i]);
-      }
-      socket.emit('updaterooms', rooms, rooms[i]);
-    }
+    
     //socket.emit('updaterooms', rooms, socket.room);
     /////////////////////////////////
             // io.sockets.emit('updaterooms', rooms);
@@ -392,6 +387,36 @@ io.sockets.on('connection', function (socket) {
 // }
   });//broadcast
 
+
+
+socket.on('dis', function(){
+    // remove the username from global usernames list
+    delete usernames[socket.username];
+    //delete rooms[socket.room];
+    // update list of users in chat, client-side
+    io.sockets.emit('updateusers', usernames);
+    // echo globally that this client has left
+    
+    
+    socket.leave(socket.room);
+    
+    //socket.emit('updaterooms', rooms, socket.room);
+    /////////////////////////////////
+            // io.sockets.emit('updaterooms', rooms);
+    // for( var i=0; i<rooms.length; i++){
+    //   if(rooms[i] == socket.room){
+    //     clients[i].leave(socket.room);
+    //     break;
+    //   }
+    // }
+
+
+
+//     var clients = io.sockets.clients(rooms);
+//     for (var i = 0; i < clients.length; i++){
+//     clients[i].leave(rooms);
+// }
+  });//broadcast
 
 
 

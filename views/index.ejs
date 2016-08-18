@@ -48,22 +48,70 @@
 
 
 <div>
-    <input id="bang_data" style="width:200px;" />
-    <input id="bang" type='button' value="방만들기" />
+    
     <button id='dede' type='submit'>방지울래?</button>
 </div>
+        
+    </div>
 
+
+
+    <div class="footer" data-role="footer">
+        <h1>질문하기를 원하시면~  <a href="#ask" class="ui-btn ui-btn-inline ui-corner-all" data-transition="slide">질문하기</a></h1>
+    </div>
+</div>
+
+
+
+
+
+<!-- 채팅창 -->
+<div data-role="page" id="chatting">
+    <div class="mainhead" data-role="header" data-position="fixed">
+
+        <h1>채팅창</h1>
+        <a href="#mainpage1" class="ui-btn ui-btn-left ui-corner-all ui-shadow" onclick="leave()" data-transition="slide" data-direction="reverse">Back</a>        
+    </div>
+    <div data-role="main" class="ui-content">    
+      <div class="ui-field-contain">
+      
 
 <div style="float:left;width:300px;height:250px;overflow:scroll-y;padding:10px;">
     <div id="conversation"></div>
     <input id="data" style="width:200px;" />
     <input type="button" id="datasend" value="send" />
 </div>
-
-
-        
+      </div>    
     </div>
 </div>
+
+
+<!-- 질문하는창 -->
+<div data-role="page" id="ask">
+    <div class="mainhead" data-role="header" data-position="fixed">
+
+        <h1>질문등록</h1>
+        <a href="#mainpage1" class="ui-btn ui-btn-left ui-corner-all ui-shadow" onclick="gomainpage()" data-transition="slide" data-direction="reverse">Back</a>        
+    </div>
+    <div data-role="main" class="ui-content">    
+      <div class="ui-field-contain">
+      
+<input id="bang_data" />
+    <input id="bang" type='button' onclick="gomainpage()" value="질문하기" />
+      </div>    
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
 
 
 <!-- 메인화면2 적립금랭킹-->
@@ -112,7 +160,7 @@
 
   <!-- 로그인 창 -->
     <div data-role="header">
-        <a href="#mainpage" class="ui-btn ui-corner-all ui-shadow" data-transition="slide" data-direction="reverse">Back</a>
+        <a href="#mainpage1" class="ui-btn ui-corner-all ui-shadow" data-transition="slide" data-direction="reverse">Back</a>
         <h1>마이페이지</h1>
         <a href="#notice" class="ui-btn ui-corner-all ui-shadow" data-transition="slide">Notice</a>
     </div>
@@ -191,13 +239,13 @@
     <div data-role="main" class="ui-content">
         <ul data-role="listview" data-inset="true">
             <li>
-                <h2>Google Chrome</h2>
-                <p>Google Chrome is a free, open-source web browser. Released in 2008.</p>
+                <h2>궁물이란?</h2>
+                <p>궁물은 2016년 만들어진 어플리케이션입니다. </p>
             </li>
             <li>
 
-                    <h2>Mozilla Firefox</h2>
-                    <p>Firefox is a web browser from Mozilla. Released in 2004.</p>
+                 <h2>궁금하신 사항은 있나요?</h2>
+                 <p>그럴땐 문의하기 가라가라라 </p>
             </li>
         </ul>
 

@@ -119,23 +119,18 @@ var email=$("#signupemail").val();
 
 
 
-//여기서부터 채팅 함수
-    var socket = io.connect('http://localhost:3000');
-    // on connection to server, ask for user's name with an anonymous callback
+
+
+
+
+// 채팅함수
+    var socket = io.connect('http://localhost:3000');    
     socket.on('connect', function(){
-        // call the server-side function 'adduser' and send one parameter (value of prompt)
-        //socket.emit('adduser', prompt("What's your name?"));
-        // $(function(){
-        //  // when the client clicks SEND
-        //  $('#namename').click( function(){
-        //      var ccc = $('#name_data').val();
-        //      socket.emit('adduser', ccc);
-        //      $('#name_data').val('');
-        //  });
-        // });
+        // 여기는 소켓 접속하자마자 쓰임... 아마 DB에서 세션값을 가져와야하지않을까?
+        
     });
 
-    // listener, whenever the server emits 'updatechat', this updates the chat body
+    // 메시지 갱신
     socket.on('updatechat', function (username, data) {
         $('#conversation').append('<b>'+username + ':</b> ' + data + '<br>');
     });
@@ -143,16 +138,17 @@ var email=$("#signupemail").val();
     // listener, whenever the server emits 'updaterooms', this updates the room the client is in
     //room이 업데이트되고 empty로 다 지운다음에 append는 맨마지막 자식노드에 추가
     socket.on('updaterooms', function(rooms, current_room) {
-        $('#rooms').empty();
-        $.each(rooms, function(key, value) {
-            if(value == current_room){
-                $('#rooms').append('<div>' + value + '</div>');
-            }
-            else {//<div><a href="#" onclick="switchRoom(\''+value+'\')">' + value + '</a></div>
-                $('#rooms').append('<div><a href="#" onclick="switchRoom(\''+value+'\')">' + value + '</a></div>');
-            }
-        });
-    });
+      $('#rooms').empty();
+      $.each(rooms, function(key, value) {
+         if((value == current_room) && (value != null)){
+            $('#rooms').append('<div>' + value + '</div>');
+         }
+         else {//<div><a href="#" onclick="switchRoom(\''+value+'\')">' + value + '</a></div>
+            if(value!=null){
+            $('#rooms').append('<div><a href="#chatting" onclick="switchRoom(\''+value+'\')">' + value + '</a></div>');
+         }}
+      });
+   });
 
     function switchRoom(room){
 
@@ -192,7 +188,7 @@ $(function(){
 
 $(function(){
     // when the client clicks SEND
-    $('#saero').click( function(){
+    $('#mainpage1').click( function(){
         //var caca = socket.room;
         //io.sockets.manager.rooms;
         socket.emit('duduman');
@@ -216,3 +212,22 @@ $(function(){
         socket.emit('jiu');
     });
 });
+
+function gomainpage() {    
+
+    $.mobile.changePage("http://localhost:3000/#mainpage1");
+
+socket.emit('duduman');
+/*
+var loopTimer = window.setTimeout(function(){ }, 1000);
+window.clearTimeout(loopTimer);        */
+}
+
+function leave() {    
+
+    socket.emit('dis');
+
+/*
+var loopTimer = window.setTimeout(function(){ }, 1000);
+window.clearTimeout(loopTimer);        */
+}
