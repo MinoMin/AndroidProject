@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/stylesheets/jquery.mobile.min.css">
+    <link rel="stylesheet" href="/stylesheets/index.css">
+    <script src="/javascripts/jquery-1.11.3.min.js"></script>
+    <script src="/javascripts/jquery.mobile-1.4.5.min.js"></script>
+    <script src="/javascripts/socket.io.js"></script>
+    <script src="/javascripts/custom.js"></script>    
+    <style>
+        .text {   
+    
+    width:30px;
+}
+        </style>
+
+  </head>
+<body>
+<!-- 메인화면 -->
+<div data-role="page" id="mainpage">
+    <div class="mainhead" data-role="header" data-position="fixed">
+
+        <h1>궁금하면 물어보세요! </h1>
+        <a href="#myinfo" class="ui-btn ui-btn-right ui-corner-all ui-shadow" data-transition="slide">My</a>
+        <div data-role="navbar">
+            <ul>
+                <li><a href="#">궁금해요</a></li>
+                <li><a href="#">적립랭킹</a></li>
+                <li><a href="#">기프티콘샵</a></li>
+            </ul>
+        </div>
+    </div>
+    <div data-role="main" class="ui-content">
+        <b>Send message</b><p>
+        Message  <input type="text" id="msgbox"/>
+        <br>
+        <span id="msgs"></span>
+    </div>
+</div>
+
+
+<!-- 회원정보 -->
+<div data-role="page" id="myinfo">
+
+
+
+  <!-- 로그인 창 -->
+    <div data-role="header">
+        <a href="#mainpage" class="ui-btn ui-corner-all ui-shadow" data-transition="slide" data-direction="reverse">Back</a>
+        <h1>마이페이지</h1>
+        <a href="#notice" class="ui-btn ui-corner-all ui-shadow" data-transition="slide">Notice</a>
+    </div>
+    <div data-role="main" class="ui-content" data-position="fixed">
+
+      <div class="ui-field-contain" id="loginform">
+        <label for="loginemail" id="loginlabel" >아이디</label>
+        <input type="email" name="loginemail" id="loginemail">       
+        <label for="loginpassword" id="passwordlabel">비밀번호</label>
+        <input type="password" name="loginpassword" id="loginpassword">
+        <button class="ui-btn ui-btn-inline ui-corner-all" id="login">로그인</button>
+        <a href="#signup" class="ui-btn ui-btn-inline ui-corner-all">회원가입</a>
+        <p id="searchpassword">비밀번호 찾기</p>
+      </div>       
+</div>
+
+    <div class="footer" data-role="footer">
+        <h1>궁물에게 바라는 점을 말씀해주세요.  <a href="#faq" class="ui-btn ui-btn-inline ui-corner-all" data-transition="slide">문의하기</a></h1>
+    </div>
+</div>
+
+
+<!-- 회원가입 -->
+<div data-role="page" id="signup">
+    <div class="mainhead" data-role="header" data-position="fixed">
+
+        <h1>회원가입</h1>
+        <a href="#myinfo" class="ui-btn ui-btn-left ui-corner-all ui-shadow" data-transition="slide" data-direction="reverse">Back</a>        
+    </div>
+    <div data-role="main" class="ui-content">    
+      <div class="ui-field-contain">
+        <label for="signupemail">사용하실 이메일</label>
+        <input type="text" name="signupemail" id="signupemail" onkeyup="checkemail()">    
+        <label for="signuppassword">비밀번호</label>
+        <input type="password" name="signuppassword" id="signuppassword">
+        <label for="nickname">닉네임</label>
+        <input type="text" name="nickname" id="nickname"  onkeyup="checknickname()">       
+        <span id="result" style="color: BLUE;">여기에서 문구나옴</span> 
+      </div>
+      <button class="ui-btn ui-corner-all" data-inline="true" id="signupuser">가입하기</button>
+      
+    </div>
+</div>
+
+
+<!-- 문의하기 -->
+<div data-role="page" id="faq">
+    <div class="mainhead" data-role="header" data-position="fixed">
+
+        <h1>문의하기</h1>
+        <a href="#myinfo" class="ui-btn ui-btn-left ui-corner-all ui-shadow" data-transition="slide" data-direction="reverse">Back</a>        
+    </div>
+    <div data-role="main" class="ui-content">
+    
+      <div class="ui-field-contain">
+      <p> 궁물에게 바라는점을 말씀해주세요</p>
+      <p> 궁물은 여러분과 함께 만들어가는 서비스입니다 :)</p>
+      <p> 이메일로 답변드려요</p>
+
+        <label for="content"></label>
+        <textarea name="content" id="content" placeholder="내용을 입력해주세요"></textarea>
+      </div>
+      <button class="ui-btn ui-corner-all" onclick="alertfaq()">궁물운영진에게 전송하기</button>      
+    
+        
+    </div>
+</div>
+
+<!-- 공지사항 -->
+<div data-role="page" id="notice">
+    <div data-role="header">
+        <a href="#myinfo" class="ui-btn ui-corner-all ui-shadow" data-transition="slide" data-direction="reverse">Back</a>
+        <h1>소식</h1>
+    </div>
+
+    <div data-role="main" class="ui-content">
+        <ul data-role="listview" data-inset="true">
+            <li>
+                <h2>Google Chrome</h2>
+                <p>Google Chrome is a free, open-source web browser. Released in 2008.</p>
+            </li>
+            <li>
+
+                    <h2>Mozilla Firefox</h2>
+                    <p>Firefox is a web browser from Mozilla. Released in 2004.</p>
+            </li>
+        </ul>
+
+
+    </div>
+</div>
+
+
+
+</body>
+</html>
