@@ -38,10 +38,10 @@ app.use('/users', users);
 
 
 
-// 메일 서버 로그인  
+// 메일 서버 로그인
 var transporter = nodemailer.createTransport({
-    service: 'Gmail', auth: { 
-      user: 'hmh0858', 
+    service: 'Gmail', auth: {
+      user: 'hmh0858',
       pass: 'gjalsgh1' }
 });
 
@@ -69,12 +69,12 @@ transporter.sendMail(mailOptions, function(error, info){
     }
     transporter.close();
    // header.sendJSON(result, res);
-});  
+});
 });
 
 
 
-// 이메일 중복 체크 
+// 이메일 중복 체크
 app.post('/checkemail',function(req,res){
 var connection = mysql.createConnection({
   host : 'localhost',
@@ -86,7 +86,7 @@ var connection = mysql.createConnection({
 connection.connect();
 var email = req.body.email;
 connection.query('SELECT email from nodeuser', function(err, rows, fields) {
-  if (!err){    
+  if (!err){
 var a = 0;
 for(var i = 0; i<rows.length; i++){
 
@@ -122,7 +122,7 @@ connection.end();
 
 
 
-// 닉네임 중복 체크 
+// 닉네임 중복 체크
 app.post('/checknickname',function(req,res){
 var connection = mysql.createConnection({
   host : 'localhost',
@@ -134,7 +134,7 @@ var connection = mysql.createConnection({
 connection.connect();
 var nickname = req.body.nickname;
 connection.query('SELECT nickname from nodeuser', function(err, rows, fields) {
-  if (!err){    
+  if (!err){
 var a = 0;
 for(var i = 0; i<rows.length; i++){
 
@@ -186,7 +186,7 @@ connection.connect();
 var user = {'email':req.body.email, 'password': req.body.password, 'nickname':req.body.nickname};
 
 connection.query('insert into nodeuser set ?', user, function(err, rows, fields) {
-  if (!err){    
+  if (!err){
   res.end("ok")
 }else{
     console.log('Error while performing Query.');
@@ -208,26 +208,18 @@ connection.end();
 
 
 
-
-
-
-
-
-
-
-
-
-
 // 채팅서버
 
 var usernames = {};
 // rooms which are currently available in chat
-//var rooms = ['INDEX','room1','room2','room3'];
 var rooms = [];
+
+var count = 0;
+
 
 io.sockets.on('connection', function (socket) {
 
- 
+
 
 
 
@@ -259,12 +251,6 @@ io.sockets.on('connection', function (socket) {
 
 
 
-
-
-
-
-
-
 /////////////////////////// 내가만듦
   socket.on('duduman', function(){
     //io.sockets.manager.rooms;
@@ -277,16 +263,10 @@ io.sockets.on('connection', function (socket) {
   });
 
 
-
-
-
-
-
-
+//////0819수정
 /////////////////////////// 내가만듦
   socket.on('bangbang', function (datav) {
-    //socket.username = username;
-    //usernames[username] = username;
+    socket.broadcast.to(socket.room).emit('updatechat', 'SERVER', socket.username+' has connected to this room');
     var j = 0;
     socket.room = datav;
     for(var i=0; i<rooms.length;i++){
@@ -297,17 +277,14 @@ io.sockets.on('connection', function (socket) {
         ///////////////////////
         //socket.emit('duduman', rooms, datav);
     }
-    socket.join(datav);
+    // socket.join(datav);
     // echo to client they've connected
     socket.emit('updatechat', 'SERVER', 'you have connected to create room!');
+    socket.join(datav);
     // echo to room 1 that a person has connected to their room         username +
-    //밑에 코드가 안먹히는 것 같음.
-    socket.broadcast.to(datav).emit('updatechat', 'SERVER', ' has connected to this room');
+    // socket.broadcast.to(socket.room).emit('updatechat', 'SERVER', socket.username+' has connected to this room');
     socket.emit('updaterooms', rooms, datav);
   });
-
-  
-
 
 
 
@@ -321,10 +298,16 @@ io.sockets.on('connection', function (socket) {
 
 
 
-
-
-//업데이트룸 
+//////0819수정
+//socket.room은 현재방이얌
+//업데이트룸      ///////////수정헀음 오류고치기위해서(새로고침 후에 같은 방 또 누르면 생겼던 에러)
   socket.on('switchRoom', function(newroom){
+    if(newroom == socket.room){
+      socket.join(socket.room);
+      socket.broadcast.to(socket.room).emit('updatechat', 'SERVER', socket.username+' has left this room');
+      io.sockets.in(socket.room).emit('updatechat', 'SERVER', socket.username+' has joined this room');
+      socket.emit('updaterooms', rooms, socket.room);
+    }else{
     socket.leave(socket.room);
     socket.join(newroom);
     socket.emit('updatechat', 'SERVER', 'you have connected to '+ newroom);
@@ -334,14 +317,16 @@ io.sockets.on('connection', function (socket) {
     socket.room = newroom;
     socket.broadcast.to(newroom).emit('updatechat', 'SERVER', socket.username+' has joined this room');
     socket.emit('updaterooms', rooms, newroom);
+  }
   });//broadcast
 
 
 
 
-
-  //방지울때 
+//0819수정
+  //방지울때
     socket.on('jiu', function(){
+      //alert(socket.room+'을 지웁니다?');
     for(var i=0; i < rooms.length+1; i++){
       if(rooms[i] == socket.room){
         //alert('진짜 지운다?');
@@ -350,9 +335,6 @@ io.sockets.on('connection', function (socket) {
       }
     }
   });
-
-
-
 
 
 
@@ -366,25 +348,8 @@ io.sockets.on('connection', function (socket) {
     // echo globally that this client has left
     socket.broadcast.to(socket.room).emit('updatechat', 'SERVER', socket.username + ' has disconnected');
     //socket.broadcast.emit('updatechat', 'SERVER', socket.username + ' has disconnected');
-    
+
     socket.leave(socket.room);
-    
-    //socket.emit('updaterooms', rooms, socket.room);
-    /////////////////////////////////
-            // io.sockets.emit('updaterooms', rooms);
-    // for( var i=0; i<rooms.length; i++){
-    //   if(rooms[i] == socket.room){
-    //     clients[i].leave(socket.room);
-    //     break;
-    //   }
-    // }
-
-
-
-//     var clients = io.sockets.clients(rooms);
-//     for (var i = 0; i < clients.length; i++){
-//     clients[i].leave(rooms);
-// }
   });//broadcast
 
 
@@ -396,29 +361,8 @@ socket.on('dis', function(){
     // update list of users in chat, client-side
     io.sockets.emit('updateusers', usernames);
     // echo globally that this client has left
-    
-    
     socket.leave(socket.room);
-    
-    //socket.emit('updaterooms', rooms, socket.room);
-    /////////////////////////////////
-            // io.sockets.emit('updaterooms', rooms);
-    // for( var i=0; i<rooms.length; i++){
-    //   if(rooms[i] == socket.room){
-    //     clients[i].leave(socket.room);
-    //     break;
-    //   }
-    // }
-
-
-
-//     var clients = io.sockets.clients(rooms);
-//     for (var i = 0; i < clients.length; i++){
-//     clients[i].leave(rooms);
-// }
   });//broadcast
-
-
 
 });
 

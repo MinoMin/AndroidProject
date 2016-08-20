@@ -1,4 +1,4 @@
-//안씀 예제 
+//안씀 예제
 /*
 $(document).ready(function(){
         var text;
@@ -10,9 +10,9 @@ $(document).ready(function(){
 
 
 // 알러트창 생성 및 보낼시 확인
-function alertfaq() {    
+function alertfaq() {
     if (confirm("궁물 운영진에게 메일을 보내시겠습니까?") == true) {
-        var text=$("#content").val();           
+        var text=$("#content").val();
             $.get("http://localhost:3000/send",{text:text},function(data){
                 if(data=="sent")
                 {
@@ -21,69 +21,69 @@ function alertfaq() {
                 }
             });
     } else {
-        //취소 버튼 아무 효과없음 
-    }    
+        //취소 버튼 아무 효과없음
+    }
 }
 
-//이메일 중복확인 
-function checkemail() {    
-    
-        var email=$("#signupemail").val();           
+//이메일 중복확인
+function checkemail() {
+
+        var email=$("#signupemail").val();
             $.post("http://localhost:3000/checkemail",{email:email},function(data){
                 if(data=="ok")
                 {
-                    
+
                     document.getElementById("result").innerHTML = "이메일을 입력해주세요.";
-                     
+
                 }
                 if(data=="no")
                 {
-                    
+
                     document.getElementById("result").innerHTML = "사용하실 수 없는 이메일입니다.";
                 }
             });
-        
+
 }
 
 //닉네임 중복확인
-function checknickname() {    
-    
-        var nickname=$("#nickname").val();           
+function checknickname() {
+
+        var nickname=$("#nickname").val();
             $.post("http://localhost:3000/checknickname",{nickname:nickname},function(data){
                 if(data=="ok")
                 {
-                    
+
                     document.getElementById("result").innerHTML = "닉네임을 입력해주세요.";
-                     
+
                 }
                 if(data=="no")
                 {
-                    
+
                     document.getElementById("result").innerHTML = "사용하실 수 없는 닉네임입니다.";
                 }
             });
-        
+
 }
 
 
 // 회원가입
-$(document).ready(function(){        
+$(document).ready(function(){
         $("#signupuser").click(function(){
-var email=$("#signupemail").val();  
-    var password=$("#signuppassword").val();  
-        var nickname=$("#nickname").val();           
+var email=$("#signupemail").val();
+    var password=$("#signuppassword").val();
+        var nickname=$("#nickname").val();
             $.post("http://localhost:3000/singupuser",{email:email, password:password, nickname:nickname},function(data){
                 if(data=="ok")
                 {
-                    
+
                      alert("가입되었습니다!");
                      $.mobile.changePage("http://localhost:3000/#myinfo");
                        //location.replace("http://localhost:3000/#myinfo");
-$("#loginform").remove(); 
+$("#loginform").remove();
                 }else{
 
                 }
-                
+
             });
 
 
@@ -92,23 +92,23 @@ $("#loginform").remove();
 
 
 // 비밀번호찾기
-$(document).ready(function(){        
+$(document).ready(function(){
         $("#searchpassword").click(function(){
-var email=$("#signupemail").val();  
-    var password=$("#signuppassword").val();  
-        var nickname=$("#nickname").val();           
+var email=$("#signupemail").val();
+    var password=$("#signuppassword").val();
+        var nickname=$("#nickname").val();
             $.post("http://localhost:3000/singupuser",{email:email, password:password, nickname:nickname},function(data){
                 if(data=="ok")
                 {
-                    
+
                      alert("가입되었습니다!");
                      $.mobile.changePage("http://localhost:3000/#myinfo");
                      //location.replace("http://localhost:3000/#myinfo");
-                     
+
                 }else{
 
                 }
-                
+
             });
 
 
@@ -124,10 +124,10 @@ var email=$("#signupemail").val();
 
 
 // 채팅함수
-    var socket = io.connect('http://localhost:3000');    
+    var socket = io.connect('http://localhost:3000');
     socket.on('connect', function(){
         // 여기는 소켓 접속하자마자 쓰임... 아마 DB에서 세션값을 가져와야하지않을까?
-        
+
     });
 
     // 메시지 갱신
@@ -136,12 +136,15 @@ var email=$("#signupemail").val();
     });
 
     // listener, whenever the server emits 'updaterooms', this updates the room the client is in
+    //0819수정
     //room이 업데이트되고 empty로 다 지운다음에 append는 맨마지막 자식노드에 추가
     socket.on('updaterooms', function(rooms, current_room) {
       $('#rooms').empty();
       $.each(rooms, function(key, value) {
          if((value == current_room) && (value != null)){
-            $('#rooms').append('<div>' + value + '</div>');
+            // $('#rooms').append('<div>' + value + '</div>');
+            $('#rooms').append('<div><a href="#chatting" onclick="switchRoom(\''+value+'\')">' + value + '</a></div>');
+            //history.go(-1);
          }
          else {//<div><a href="#" onclick="switchRoom(\''+value+'\')">' + value + '</a></div>
             if(value!=null){
@@ -175,7 +178,7 @@ var email=$("#signupemail").val();
         });
     });
 
-///내가 만든 함수 (데이터 보내기위해서 클라이언트에서)
+///내가 만든 함수 (데이터 보내기위해서 클라이언트에서(방이름))
 $(function(){
     // when the client clicks SEND
     $('#bang').click( function(){
@@ -186,6 +189,7 @@ $(function(){
     });
 });
 
+////////////// 방목록 새로고침 역할
 $(function(){
     // when the client clicks SEND
     $('#mainpage1').click( function(){
@@ -205,25 +209,28 @@ $(function(){
     });
 });
 
+//0819수정
 ///방지우는거 만듦
 $(function(){
     // when the client clicks SEND
     $('#dede').click( function(){
+        alert('현재방을 지웁니다');
         socket.emit('jiu');
     });
 });
 
-function gomainpage() {    
+//0819수정
+function gomainpage() {
 
-    $.mobile.changePage("http://localhost:3000/#mainpage1");
-
-socket.emit('duduman');
+    // $.mobile.changePage("http://localhost:3000/#mainpage1");
+    $.mobile.changePage("http://localhost:3000/#chatting");
+//socket.emit('duduman');
 /*
 var loopTimer = window.setTimeout(function(){ }, 1000);
 window.clearTimeout(loopTimer);        */
 }
 
-function leave() {    
+function leave() {
 
     socket.emit('dis');
 
