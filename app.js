@@ -197,11 +197,50 @@ connection.end();
 
 
 
+// 세션 기본설정
+app.use(session({
+  secret : 'keyboard cat',
+  resave : false,
+  saveUninitialized : true
+
+}))
+
+
+// 로그인 시키기
+app.post('/login',function(req,res){
+  var email = req.body.email;
+  var password = req.body.password;
+
+var connection = mysql.createConnection({
+  host : 'localhost',
+  user : 'root',
+  password : 'kitri',
+  database : 'project'
+});
+
+connection.connect();
+
+connection.query('SELECT count(*) cnt from nodeuser where email = ? and password = ?', [email, password], function(err, rows, fields) {
+  if (!err){
+    var cnt = rows[0].cnt;
+    if(cnt == 1){
+      req.session.email = email; 
 
 
 
+  res.end("ok");
+}else{
+  res.end("no");
+  }
+}else{
+    console.log('Error while performing Query.');
+  }
+});
+connection.end();
 
 
+
+});
 
 
 
@@ -230,10 +269,11 @@ io.sockets.on('connection', function (socket) {
     socket.on('adduser', function(username){
     // store the username in the socket session for this client
     socket.username = username;
+    usernames[username] = username;
     // store the room name in the socket session for this client
   //  socket.room = 'INDEX';
     // add the client's username to7 the global list
-    usernames[username] = username;
+    
     // send client to room 1
   //  socket.join('INDEX');
     // echo to client they've connected

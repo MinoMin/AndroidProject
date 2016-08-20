@@ -97,7 +97,7 @@ $(document).ready(function(){
 var email=$("#signupemail").val();
     var password=$("#signuppassword").val();
         var nickname=$("#nickname").val();
-            $.post("http://localhost:3000/singupuser",{email:email, password:password, nickname:nickname},function(data){
+            $.post("http://localhost:3000/singupuser",{email:email, password:password},function(data){
                 if(data=="ok")
                 {
 
@@ -119,6 +119,53 @@ var email=$("#signupemail").val();
 
 
 
+
+
+// 로그인하기
+$(document).ready(function(){
+        $("#login").click(function(){
+var email=$("#loginemail").val();
+    var password=$("#loginpassword").val();        
+            $.post("http://localhost:3000/login",{email:email, password:password},function(data){
+                if(data=="ok")
+                {
+
+                     alert("로그인 되었습니다!");                     
+                      
+$("#loginform").remove();
+                }else{
+ alert("로그인이 실패하였습니다!"); 
+                }
+
+            });
+
+
+        });
+    });
+
+/*
+function login() {
+
+var email=$("#loginemail").val();
+    var password=$("#loginpassword").val();        
+            $.post("http://localhost:3000/login",{email:email, password:password, nickname:nickname},function(data){
+                if(data=="ok")
+                {
+
+                     alert("로그인 되었습니다!");                     
+                      
+$("#loginform").remove();
+                }else{
+ alert("로그인이 실패하였습니다!"); 
+                }
+
+            });
+
+
+   }
+
+
+*/
 
 
 
@@ -143,12 +190,12 @@ var email=$("#signupemail").val();
       $.each(rooms, function(key, value) {
          if((value == current_room) && (value != null)){
             // $('#rooms').append('<div>' + value + '</div>');
-            $('#rooms').append('<div><a href="#chatting" onclick="switchRoom(\''+value+'\')">' + value + '</a></div>');
+            $('#rooms').append('<li><a href="#chatting" onclick="switchRoom(\''+value+'\')">' + value + '</a></li>');
             //history.go(-1);
          }
          else {//<div><a href="#" onclick="switchRoom(\''+value+'\')">' + value + '</a></div>
             if(value!=null){
-            $('#rooms').append('<div><a href="#chatting" onclick="switchRoom(\''+value+'\')">' + value + '</a></div>');
+            $('#rooms').append('<li><a href="#chatting" onclick="switchRoom(\''+value+'\')">' + value + '</a></li>');
          }}
       });
    });
@@ -214,8 +261,9 @@ $(function(){
 $(function(){
     // when the client clicks SEND
     $('#dede').click( function(){
-        alert('현재방을 지웁니다');
+        alert('이 질문은 이제 삭제 됩니다.');
         socket.emit('jiu');
+        $.mobile.changePage("http://localhost:3000/#mainpage1");
     });
 });
 
@@ -232,7 +280,7 @@ window.clearTimeout(loopTimer);        */
 
 function leave() {
 
-    socket.emit('dis');
+    //socket.emit('dis');
 
 /*
 var loopTimer = window.setTimeout(function(){ }, 1000);

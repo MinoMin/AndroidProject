@@ -3,7 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/stylesheets/jquery.mobile.min.css">
-    <link rel="stylesheet" href="/stylesheets/index.css">
+    <link rel="stylesheet" href="/stylesheets/index.css">    
     <script src="/javascripts/jquery-1.11.3.min.js"></script>
     <script src="/javascripts/jquery.mobile-1.4.5.min.js"></script>
     <script src="/javascripts/socket.io.js"></script>
@@ -42,13 +42,16 @@
     </div>
     <div><button id='saero' type='submit'>목록새로고침</button>></div>
     <h4>방목록</h4>
-    <div id='rooms'></div>
+    <ol data-role="listview">
+    <div id='rooms'> </div>
+    
+    </ol>
 </div>
 
 
 <div>
 
-    <button id='dede' type='submit' style="margin-bottom:50%;">방지울래?</button>
+    
 </div>
 
     </div>
@@ -69,7 +72,7 @@
     <div class="mainhead" data-role="header" data-position="fixed">
 
         <h1>채팅창</h1>
-        <a href="#mainpage1" class="ui-btn ui-btn-left ui-corner-all ui-shadow" onclick="leave()" data-transition="slide" data-direction="reverse">Back</a>
+        <a href="#mainpage1" class="ui-btn ui-btn-left ui-corner-all ui-shadow" data-transition="slide" data-direction="reverse">Back</a>
     </div>
     <div data-role="main" class="ui-content">
       <div class="ui-field-contain">
@@ -78,6 +81,7 @@
     <div id="conversation"></div>
     <input id="data" style="width:200px;" />
     <input type="button" id="datasend" value="send" />
+    <button id='dede' type='submit' style="margin-bottom:50%;">답변에 만족했어요!</button>
 </div>
       </div>
     </div>
@@ -143,7 +147,65 @@
     </div>
 
     <div data-role="main" class="ui-content">
-        3번창
+    <ul data-role="listview" >
+      <li>
+        <a href="#">
+        <img src="/images/bbq1.png">
+        <h2>황금올리브치킨+콜라+1.25L</h2>
+        <p>18,000원</p>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+        <img src="/images/bbq2.png">
+        <h2>자메이카통다리+콜라1.25L</h2>
+        <p>19,500원</p>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+        <img src="/images/bbq3.png">
+        <h2>허니갈릭스(한마리)+콜라1.25L</h2>
+        <p>20,900원</p>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+        <img src="/images/bsk1.png">
+        <h2>파인트 아이스크림</h2>
+        <p>7,200원</p>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+        <img src="/images/bsk2.png">
+        <h2>패밀리 아이스크림</h2>
+        <p>19,500원</p>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+        <img src="/images/pa1.png">
+        <h2>마이넘버원2</h2>
+        <p>25,000원</p>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+        <img src="/images/pa2.png">
+        <h2>치즈케이크</h2>
+        <p>23,000원</p>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+        <img src="/images/pa3.png">
+        <h2>초코반딸기반 케이크</h2>
+        <p>21,000원</p>
+        </a>
+      </li>
+    </ul>
+
     </div>
 </div>
 
