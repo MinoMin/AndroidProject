@@ -225,8 +225,7 @@ connection.query('SELECT count(*) cnt from nodeuser where email = ? and password
     var cnt = rows[0].cnt;
     if(cnt == 1){
       req.session.email = email; 
-
-
+      
 
   res.end("ok");
 }else{
@@ -241,6 +240,31 @@ connection.end();
 
 
 });
+
+
+//로그인하면서  아이디값으로 닉네임 가져오기
+function setNickname() {
+    
+}
+
+
+
+
+
+// 로그아웃하기 세션파괴하면서
+app.post('/logout',function(req,res){
+req.session.destroy(function(err){
+if(err) console.error('err', err);
+  res.end("ok");
+})
+
+  
+
+});
+
+
+
+
 
 
 

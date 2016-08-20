@@ -130,9 +130,17 @@ var email=$("#loginemail").val();
                 if(data=="ok")
                 {
 
+                    
+
                      alert("로그인 되었습니다!");                     
                       
-$("#loginform").remove();
+                      $('#loginemail').val('');
+                      $('#loginpassword').val('');
+$("#loginform").hide();
+
+
+$("#logout").show();
+
                 }else{
  alert("로그인이 실패하였습니다!"); 
                 }
@@ -143,18 +151,21 @@ $("#loginform").remove();
         });
     });
 
-/*
-function login() {
 
-var email=$("#loginemail").val();
-    var password=$("#loginpassword").val();        
-            $.post("http://localhost:3000/login",{email:email, password:password, nickname:nickname},function(data){
+// 로그아웃하기
+$(document).ready(function(){
+        $("#logout").click(function(){
+            $.post("http://localhost:3000/logout", function(data){
                 if(data=="ok")
                 {
-
-                     alert("로그인 되었습니다!");                     
+                    
+                     alert("로그아웃 되었습니다.");                     
+                     $("#loginform").show();
+                     $("#logout").hide();
                       
-$("#loginform").remove();
+
+
+
                 }else{
  alert("로그인이 실패하였습니다!"); 
                 }
@@ -162,10 +173,24 @@ $("#loginform").remove();
             });
 
 
-   }
+        });
+    
+    });
 
 
-*/
+
+$(document).ready(function(){
+        $("#removeconver").click(function(){
+            $("#conversation").empty();
+
+
+        });
+    
+    });
+
+
+
+
 
 
 
