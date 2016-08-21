@@ -36,7 +36,7 @@ app.use('/users', users);
 
 
 
-var allcheck;
+
 
 // 메일 서버 로그인
 var transporter = nodemailer.createTransport({
@@ -227,9 +227,9 @@ connection.query('SELECT count(*) cnt, nickname from nodeuser where email = ? an
     
     if(cnt == 1){
       req.session.email = email; 
-      allcheck = req.session.email;
+      
 
-      console.log(req.session.email);
+//      console.log(req.session.email);
 
   res.end(username);
 
@@ -265,11 +265,11 @@ if(err) console.error('err', err);
 // 질문할때 로그인 안돼있으면 못가게 체크
 app.post('/checkask',function(req,res){
 if(req.session.email){
-  console.log(req.session.email);
+  //console.log(req.session.email);
   res.end("ok")
 
 }else{
-console.log(req.session.email);
+//console.log(req.session.email);
   res.end("no")
   
 }
@@ -280,11 +280,11 @@ console.log(req.session.email);
 // 질문하는 방 들어갈때 로그인 안돼있으면 못가게 체크
 app.post('/checkjoinask',function(req,res){
 if(req.session.email){
-  console.log(req.session.email);
+  //console.log(req.session.email);
   res.end("ok")
 
 }else{
-console.log(req.session.email);
+//console.log(req.session.email);
   res.end("no")
   
 }
@@ -349,7 +349,7 @@ var count = 0;
 
 
 io.sockets.on('connection', function (socket) {
-
+ 
   // when the client emits 'adduser', this listens and executes
     socket.on('adduser', function(username){
     // store the username in the socket session for this client
@@ -414,6 +414,8 @@ socket.on('saveask', function (datav) {
 
 
 
+
+
     for(var i=0; i<rooms.length;i++){
       j++;
     }
@@ -433,13 +435,6 @@ socket.on('saveask', function (datav) {
 
 
   });
-
-
-
-
-
-
-
 
 
 
@@ -474,6 +469,9 @@ socket.on('saveask', function (datav) {
     socket.emit('updaterooms', rooms, newroom);
   }
   });//broadcast
+
+
+
 
 
 
