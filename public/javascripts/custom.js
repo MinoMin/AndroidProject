@@ -79,7 +79,10 @@ var email=$("#signupemail").val();
                      alert("가입되었습니다!");
                      $.mobile.changePage("http://localhost:3000/#myinfo");
                        //location.replace("http://localhost:3000/#myinfo");
-$("#loginform").remove();
+$('#loginemail').val('');
+                      $('#loginpassword').val('');
+                        $("#loginform").hide();
+                        $("#logout").show();
                 }else{
 
                 }
@@ -120,32 +123,28 @@ var email=$("#signupemail").val();
 
 
 
-
 // 로그인하기
 $(document).ready(function(){
         $("#login").click(function(){
 var email=$("#loginemail").val();
     var password=$("#loginpassword").val();        
             $.post("http://localhost:3000/login",{email:email, password:password},function(data){
-                if(data=="ok")
-                {
 
-                    
+if(data=="no"){
 
-                     alert("로그인 되었습니다!");                     
-                      
-                      $('#loginemail').val('');
+ 
+}else{
+
+
+alert("로그인 되었습니다.");    
+socket.emit('adduser', data);
+                        $('#loginemail').val('');
                       $('#loginpassword').val('');
-$("#loginform").hide();
+                        $("#loginform").hide();
+                        $("#logout").show();
 
-
-$("#logout").show();
-
-                }else{
- alert("로그인이 실패하였습니다!"); 
-                }
-
-            });
+}
+          });
 
 
         });
@@ -215,20 +214,42 @@ $(document).ready(function(){
       $.each(rooms, function(key, value) {
          if((value == current_room) && (value != null)){
             // $('#rooms').append('<div>' + value + '</div>');
-            $('#rooms').append('<li><a href="#chatting" onclick="switchRoom(\''+value+'\')">' + value + '</a></li>');
+            $('#rooms').append('<li><p onclick="switchRoom(\''+value+'\')">' + value + key+ '</p></li>');
             //history.go(-1);
          }
          else {//<div><a href="#" onclick="switchRoom(\''+value+'\')">' + value + '</a></div>
             if(value!=null){
-            $('#rooms').append('<li><a href="#chatting" onclick="switchRoom(\''+value+'\')">' + value + '</a></li>');
+            $('#rooms').append('<li><p onclick="switchRoom(\''+value+'\')">' + value + key+'</p></li>');
          }}
       });
    });
 
+
+
+// 방입장할때 로그인 여부 체크
     function switchRoom(room){
+
+$.post("http://localhost:3000/checkjoinask", function(data){
+if(data=="ok"){
+
+$.mobile.changePage("http://localhost:3000/#chatting");
+socket.emit('switchRoom', room);
+
+}else{
+    alert("로그인 후 이용해주세요.");
+    $.mobile.changePage("http://localhost:3000/#myinfo");
+}
+                
+            });   
+
+
+
+
 
         socket.emit('switchRoom', room);
     }
+
+
 
     // on load of page
     $(function(){
@@ -250,18 +271,9 @@ $(document).ready(function(){
         });
     });
 
-///내가 만든 함수 (데이터 보내기위해서 클라이언트에서(방이름))
-$(function(){
-    // when the client clicks SEND
-    $('#bang').click( function(){
-        var r_data = $('#bang_data').val();
-        document.getElementById("rooms").innerHTML = r_data;
-        socket.emit('bangbang', r_data);
-        $('#bang_data').val('');
-    });
-});
 
-////////////// 방목록 새로고침 역할
+
+// 방목록 새로고침 역할
 $(function(){
     // when the client clicks SEND
     $('#mainpage1').click( function(){
@@ -271,43 +283,39 @@ $(function(){
     });
 });
 
-///닉네임 입력받으면 유저이름 보내는거 만듦
-$(function(){
-    // when the client clicks SEND
-    $('#namename').click( function(){
-        var ccc = $('#name_data').val();
-        socket.emit('adduser', ccc);
-        $('#name_data').val('');
-    });
-});
 
-//0819수정
-///방지우는거 만듦
+
+// 질문 삭제
 $(function(){
     // when the client clicks SEND
     $('#dede').click( function(){
         alert('이 질문은 이제 삭제 됩니다.');
+        $("#conversation").empty();
         socket.emit('jiu');
         $.mobile.changePage("http://localhost:3000/#mainpage1");
     });
 });
 
-//0819수정
+// 질문할때 로그인돼있으면 질문하고 아니면 로그인창 이동
 function gomainpage() {
 
-    // $.mobile.changePage("http://localhost:3000/#mainpage1");
-    $.mobile.changePage("http://localhost:3000/#chatting");
-//socket.emit('duduman');
-/*
-var loopTimer = window.setTimeout(function(){ }, 1000);
-window.clearTimeout(loopTimer);        */
+$.post("http://localhost:3000/checkask", function(data){
+if(data=="ok"){
+
+var r_data = $('#bang_data').val();
+        document.getElementById("rooms").innerHTML = r_data;
+        socket.emit('makingask', r_data);
+$.post("http://localhost:3000/saveask", {roomname : r_data}, function(data){
+
+ });   
+
+        $('#bang_data').val('');
+
+$.mobile.changePage("http://localhost:3000/#chatting");
+}else{
+    alert("로그인 후 이용해주세요.");
+    $.mobile.changePage("http://localhost:3000/#myinfo");
 }
-
-function leave() {
-
-    //socket.emit('dis');
-
-/*
-var loopTimer = window.setTimeout(function(){ }, 1000);
-window.clearTimeout(loopTimer);        */
+                
+            });    
 }

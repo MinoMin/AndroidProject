@@ -23,7 +23,7 @@
         <a href="#myinfo" class="ui-btn ui-btn-right ui-corner-all ui-shadow" data-transition="slide">My</a>
         <div data-role="navbar">
             <ul>
-                <li><a href="#">궁금해요</a></li>
+                <li><a href="#" onclick="refresh()">궁금해요</a></li>
                 <li><a href="#mainpage2">적립랭킹</a></li>
                 <li><a href="#mainpage3">기프티콘샵</a></li>
             </ul>
@@ -35,11 +35,7 @@
 
 <!-- 0819수정 -->
 <div>
-    <!-- <b>ROOMS</b> -->
-    <div>
-        <input id="name_data" style="width:100px;" />
-        <input id="namename" type='button' value="닉네임입력" />
-    </div>
+    <!-- <b>ROOMS</b> -->    
     <div><button id='saero' type='submit'>목록새로고침</button>></div>
     <h4>방목록</h4>
     <ol data-role="listview">
@@ -59,7 +55,7 @@
 
 
     <div class="footer" data-role="footer">
-        <h1>질문하기를 원하시면~  <a href="#ask" class="ui-btn ui-btn-inline ui-corner-all" data-transition="slide">질문하기</a></h1>
+        <h1>질문하기를 원하시면~  <a href="#ask" class="ui-btn ui-btn-inline ui-corner-all" data-transition="slide" id = "checkask">질문하기</a></h1>
     </div>
 </div>
 
@@ -92,7 +88,7 @@
     <div class="mainhead" data-role="header" data-position="fixed">
 
         <h1>질문등록</h1>
-        <a href="#mainpage1" class="ui-btn ui-btn-left ui-corner-all ui-shadow" onclick="gomainpage()" data-transition="slide" data-direction="reverse">Back</a>
+        <a href="#mainpage1" class="ui-btn ui-btn-left ui-corner-all ui-shadow" data-transition="slide" data-direction="reverse">Back</a>
     </div>
     <div data-role="main" class="ui-content">
       <div class="ui-field-contain">
@@ -121,7 +117,7 @@
         <a href="#myinfo" class="ui-btn ui-btn-right ui-corner-all ui-shadow" data-transition="slide">My</a>
         <div data-role="navbar">
             <ul>
-                <li><a href="#mainpage1">궁금해요</a></li>
+                <li><a href="#mainpage1" onclick="refresh()">궁금해요</a></li>
                 <li><a href="#">적립랭킹</a></li>
                 <li><a href="#mainpage3">기프티콘샵</a></li>
             </ul>
@@ -139,7 +135,7 @@
         <a href="#myinfo" class="ui-btn ui-btn-right ui-corner-all ui-shadow" data-transition="slide">My</a>
         <div data-role="navbar">
             <ul>
-                <li><a href="#mainpage1">궁금해요</a></li>
+                <li><a href="#mainpage1" onclick="refresh()">궁금해요</a></li>
                 <li><a href="#mainpage2">적립랭킹</a></li>
                 <li><a href="#">기프티콘샵</a></li>
             </ul>

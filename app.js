@@ -220,14 +220,18 @@ var connection = mysql.createConnection({
 
 connection.connect();
 
-connection.query('SELECT count(*) cnt from nodeuser where email = ? and password = ?', [email, password], function(err, rows, fields) {
+connection.query('SELECT count(*) cnt, nickname from nodeuser where email = ? and password = ?', [email, password], function(err, rows, fields) {
   if (!err){
     var cnt = rows[0].cnt;
+    username = rows[0].nickname;
+    
     if(cnt == 1){
       req.session.email = email; 
-      
 
-  res.end("ok");
+      console.log(req.session.email);
+
+  res.end(username);
+
 }else{
   res.end("no");
   }
@@ -240,12 +244,6 @@ connection.end();
 
 
 });
-
-
-//로그인하면서  아이디값으로 닉네임 가져오기
-function setNickname() {
-    
-}
 
 
 
@@ -263,11 +261,63 @@ if(err) console.error('err', err);
 });
 
 
+// 질문할때 로그인 안돼있으면 못가게 체크
+app.post('/checkask',function(req,res){
+if(req.session.email){
+  console.log(req.session.email);
+  res.end("ok")
+
+}else{
+console.log(req.session.email);
+  res.end("no")
+  
+}
 
 
+});
+
+// 질문하는 방 들어갈때 로그인 안돼있으면 못가게 체크
+app.post('/checkjoinask',function(req,res){
+if(req.session.email){
+  console.log(req.session.email);
+  res.end("ok")
+
+}else{
+console.log(req.session.email);
+  res.end("no")
+  
+}
 
 
+});
 
+
+// 질문정보 저장
+app.post('/saveask',function(req, res){
+
+var roomname = req.body.roomname;
+var connection = mysql.createConnection({
+  host : 'localhost',
+  user : 'root',
+  password : 'kitri',
+  database : 'project'
+});
+
+connection.connect();
+
+connection.query('insert into ask values(?, ?)', [req.session.email, roomname], function(err, rows, fields) {
+  if (!err){
+  
+  console.log("성공");  
+
+}else{
+  console.log("실패");
+  }
+
+});
+connection.end();   
+
+});
 
 
 
@@ -282,22 +332,16 @@ var count = 0;
 
 io.sockets.on('connection', function (socket) {
 
-
-
-
-
-
-
-
   // when the client emits 'adduser', this listens and executes
     socket.on('adduser', function(username){
     // store the username in the socket session for this client
-    socket.username = username;
-    usernames[username] = username;
+    
     // store the room name in the socket session for this client
   //  socket.room = 'INDEX';
     // add the client's username to7 the global list
     
+    socket.username = username;
+    usernames[username] = username;
     // send client to room 1
   //  socket.join('INDEX');
     // echo to client they've connected
@@ -305,6 +349,7 @@ io.sockets.on('connection', function (socket) {
     // echo to room 1 that a person has connected to their room
   //  socket.broadcast.to('INDEX').emit('updatechat', 'SERVER', username + ' has connected to this room');
   //  socket.emit('updaterooms', rooms, 'INDEX');
+  
   var k = 0;
   for(var i=0; i<rooms.length+1;i++){
     socket.emit('updaterooms', rooms, rooms[k]);
@@ -326,13 +371,31 @@ io.sockets.on('connection', function (socket) {
   }
   });
 
+/*
+
+// 저장정보 저장
+socket.on('saveask', function (datav) {
+    
+
+
+
+
+
+  });
+*/
+
 
 //////0819수정
 /////////////////////////// 내가만듦
-  socket.on('bangbang', function (datav) {
+  socket.on('makingask', function (datav) {
     socket.broadcast.to(socket.room).emit('updatechat', 'SERVER', socket.username+' has connected to this room');
     var j = 0;
     socket.room = datav;
+    roomname = datav;
+
+
+
+
     for(var i=0; i<rooms.length;i++){
       j++;
     }
@@ -349,6 +412,13 @@ io.sockets.on('connection', function (socket) {
     // socket.broadcast.to(socket.room).emit('updatechat', 'SERVER', socket.username+' has connected to this room');
     socket.emit('updaterooms', rooms, datav);
   });
+
+
+
+
+
+
+
 
 
 
