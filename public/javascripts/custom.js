@@ -97,6 +97,7 @@ $('#loginemail').val('');
 // 비밀번호찾기
 $(document).ready(function(){
         $("#searchpassword").click(function(){
+            /*
 var email=$("#signupemail").val();
     var password=$("#signuppassword").val();
         var nickname=$("#nickname").val();
@@ -113,7 +114,7 @@ var email=$("#signupemail").val();
                 }
 
             });
-
+*/
 
         });
     });
@@ -223,6 +224,7 @@ $(document).ready(function(){
          }}
       });
    });
+
 
 
 

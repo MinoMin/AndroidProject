@@ -36,7 +36,7 @@ app.use('/users', users);
 
 
 
-
+var allcheck;
 
 // 메일 서버 로그인
 var transporter = nodemailer.createTransport({
@@ -227,6 +227,7 @@ connection.query('SELECT count(*) cnt, nickname from nodeuser where email = ? an
     
     if(cnt == 1){
       req.session.email = email; 
+      allcheck = req.session.email;
 
       console.log(req.session.email);
 
@@ -320,6 +321,23 @@ connection.end();
 });
 
 
+app.post('/checkwho',function(req,res){
+if(req.session.email){
+  console.log(req.session.email);
+  res.end("ok")
+
+}else{
+console.log(req.session.email);
+  res.end("no")
+  
+}
+
+
+});
+
+
+
+
 
 // 채팅서버
 
@@ -411,6 +429,9 @@ socket.on('saveask', function (datav) {
     // echo to room 1 that a person has connected to their room         username +
     // socket.broadcast.to(socket.room).emit('updatechat', 'SERVER', socket.username+' has connected to this room');
     socket.emit('updaterooms', rooms, datav);
+    
+
+
   });
 
 
