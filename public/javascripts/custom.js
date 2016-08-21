@@ -13,11 +13,11 @@ $(document).ready(function(){
 function alertfaq() {
     if (confirm("궁물 운영진에게 메일을 보내시겠습니까?") == true) {
         var text=$("#content").val();
-            $.get("http://localhost:3000/send",{text:text},function(data){
+            $.get("http://112.187.238.72:3000/send",{text:text},function(data){
                 if(data=="sent")
                 {
                      alert("전송되었습니다!");
-                    location.replace("http://localhost:3000/#myinfo");
+                    location.replace("http://112.187.238.72:3000/#myinfo");
                 }
             });
     } else {
@@ -29,7 +29,7 @@ function alertfaq() {
 function checkemail() {
 
         var email=$("#signupemail").val();
-            $.post("http://localhost:3000/checkemail",{email:email},function(data){
+            $.post("http://112.187.238.72:3000/checkemail",{email:email},function(data){
                 if(data=="ok")
                 {
 
@@ -49,7 +49,7 @@ function checkemail() {
 function checknickname() {
 
         var nickname=$("#nickname").val();
-            $.post("http://localhost:3000/checknickname",{nickname:nickname},function(data){
+            $.post("http://112.187.238.72:3000/checknickname",{nickname:nickname},function(data){
                 if(data=="ok")
                 {
 
@@ -72,17 +72,16 @@ $(document).ready(function(){
 var email=$("#signupemail").val();
     var password=$("#signuppassword").val();
         var nickname=$("#nickname").val();
-            $.post("http://localhost:3000/singupuser",{email:email, password:password, nickname:nickname},function(data){
+            $.post("http://112.187.238.72:3000/singupuser",{email:email, password:password, nickname:nickname},function(data){
                 if(data=="ok")
                 {
 
                      alert("가입되었습니다!");
-                     $.mobile.changePage("http://localhost:3000/#myinfo");
+                     $.mobile.changePage("http://112.187.238.72:3000/#myinfo");
                        //location.replace("http://localhost:3000/#myinfo");
 $('#loginemail').val('');
                       $('#loginpassword').val('');
-                        $("#loginform").hide();
-                        $("#logout").show();
+                        
                 }else{
 
                 }
@@ -129,7 +128,7 @@ $(document).ready(function(){
         $("#login").click(function(){
 var email=$("#loginemail").val();
     var password=$("#loginpassword").val();        
-            $.post("http://localhost:3000/login",{email:email, password:password},function(data){
+            $.post("http://112.187.238.72:3000/login",{email:email, password:password},function(data){
 
 if(data=="no"){
 
@@ -142,7 +141,7 @@ socket.emit('adduser', data);
                         $('#loginemail').val('');
                       $('#loginpassword').val('');
                         $("#loginform").hide();
-                        $("#logout").show();
+                        $("#logout").show();              
 
 }
           });
@@ -155,7 +154,7 @@ socket.emit('adduser', data);
 // 로그아웃하기
 $(document).ready(function(){
         $("#logout").click(function(){
-            $.post("http://localhost:3000/logout", function(data){
+            $.post("http://112.187.238.72:3000/logout", function(data){
                 if(data=="ok")
                 {
                     
@@ -178,12 +177,12 @@ $(document).ready(function(){
     });
 
 
-
+// 백버튼 누를때 대화지우기
 $(document).ready(function(){
         $("#removeconver").click(function(){
             $("#conversation").empty();
 
-
+socket.emit('disconnet');
         });
     
     });
@@ -196,7 +195,7 @@ $(document).ready(function(){
 
 
 // 채팅함수
-    var socket = io.connect('http://localhost:3000');
+    var socket = io.connect('http://112.187.238.72:3000');
     socket.on('connect', function(){
         // 여기는 소켓 접속하자마자 쓰임... 아마 DB에서 세션값을 가져와야하지않을까?
 
@@ -215,12 +214,12 @@ $(document).ready(function(){
       $.each(rooms, function(key, value) {
          if((value == current_room) && (value != null)){
             // $('#rooms').append('<div>' + value + '</div>');
-            $('#rooms').append('<li><p onclick="switchRoom(\''+value+'\')">' + value + key+ '</p></li>');
+            $('#rooms').append('<h3 id = "' + value + '"onclick="switchRoom(\''+value+'\')">' + value + '</h3>');            
             //history.go(-1);
          }
          else {//<div><a href="#" onclick="switchRoom(\''+value+'\')">' + value + '</a></div>
             if(value!=null){
-            $('#rooms').append('<li><p onclick="switchRoom(\''+value+'\')">' + value + key+'</p></li>');
+            $('#rooms').append('<h3 id = "' + value + '"onclick="switchRoom(\''+value+'\')">' + value +'</h3>');
          }}
       });
    });
@@ -228,18 +227,39 @@ $(document).ready(function(){
 
 
 
+socket.on('changebutton', function () {       
+ $("#dede").show();  
+    
+   });
+
+
+socket.on('hidebutton', function () {       
+ $("#dede").hide();  
+    
+   });
+
+
+
+
+
+
+
+
 // 방입장할때 로그인 여부 체크
     function switchRoom(room){
 
-$.post("http://localhost:3000/checkjoinask", function(data){
-if(data=="ok"){
+$.post("http://112.187.238.72:3000/checkjoinask", function(data){
+if(data=="no"){
 
-$.mobile.changePage("http://localhost:3000/#chatting");
-socket.emit('switchRoom', room);
+alert("로그인 후 이용해주세요.");
+    $.mobile.changePage("http://112.187.238.72:3000/#myinfo");
+
 
 }else{
-    alert("로그인 후 이용해주세요.");
-    $.mobile.changePage("http://localhost:3000/#myinfo");
+    $.mobile.changePage("http://112.187.238.72:3000/#chatting");
+
+socket.emit('switchRoom', room, data);
+    
 }
                 
             });   
@@ -294,29 +314,49 @@ $(function(){
         alert('이 질문은 이제 삭제 됩니다.');
         $("#conversation").empty();
         socket.emit('jiu');
-        $.mobile.changePage("http://localhost:3000/#mainpage1");
+        $.mobile.changePage("http://112.187.238.72:3000/#mainpage1");
     });
 });
 
 // 질문할때 로그인돼있으면 질문하고 아니면 로그인창 이동
 function gomainpage() {
 
-$.post("http://localhost:3000/checkask", function(data){
-if(data=="ok"){
+$.post("http://112.187.238.72:3000/checkask", function(data){
+if(data=="no"){
+alert("로그인 후 이용해주세요.");
+    $.mobile.changePage("http://112.187.238.72:3000/#myinfo");
 
+}else{
 var r_data = $('#bang_data').val();
         document.getElementById("rooms").innerHTML = r_data;
-        socket.emit('makingask', r_data);
-$.post("http://localhost:3000/saveask", {roomname : r_data}, function(data){
+
+$.post("http://112.187.238.72:3000/saveask", {roomname : r_data}, function(data){
+    if(data == "ok"){
+
+        socket.emit('makingask', r_data, data);
+
+
+        $('#bang_data').val('');
+        $.mobile.changePage("http://112.187.238.72:3000/#chatting");
+
+    }
 
  });   
 
-        $('#bang_data').val('');
 
-$.mobile.changePage("http://localhost:3000/#chatting");
-}else{
-    alert("로그인 후 이용해주세요.");
-    $.mobile.changePage("http://localhost:3000/#myinfo");
+
+
+
+
+
+
+
+
+
+
+
+
+    
 }
                 
             });    

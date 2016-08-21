@@ -24,7 +24,7 @@
 <body>
 <!-- 메인화면1 질문들-->
 <div data-role="page" id="mainpage1">
-    <div class="mainhead" data-role="header" data-position="fixed" style="background-color:skyblue" > <h1>궁금하면 물어보세요! </h1>
+    <div class="mainhead" data-role="header" data-position="fixed"> <h1>궁금하면 물어보세요! </h1>
         <a href="#myinfo" class="ui-btn ui-btn-right ui-corner-all ui-shadow" data-transition="slide">My</a>
         <div data-role="navbar">
             <ul>
@@ -69,9 +69,9 @@
 <!-- 0819수정 -->
 <!-- 채팅창 -->
 <div data-role="page" id="chatting">
-    <div class="mainhead" data-role="header" data-position="fixed" style="background-color:skyblue">
+    <div class="mainhead" data-role="header" data-position="fixed">
 
-        <h1>물어보는중</h1>
+        <h1>채팅창</h1>
         <a href="#mainpage1" class="ui-btn ui-btn-left ui-corner-all ui-shadow" data-transition="slide" data-direction="reverse" id = "removeconver">Back</a>
     </div>
     <div data-role="main" class="ui-content">
@@ -81,7 +81,7 @@
     <div id="conversation"></div>
     <input id="data" style="width:200px;" />
     <input type="button" id="datasend" value="send" />
-    <button id='dede' type='submit' style = "display:none" >답변에 만족했어요!</button>
+    <button id='dede' type='submit' style="margin-bottom:50%;">답변에 만족했어요!</button>
 </div>
       </div>
     </div>
@@ -89,7 +89,7 @@
 
 <!-- 질문하는창 -->
 <div data-role="page" id="ask">
-    <div class="mainhead" data-role="header" data-position="fixed" style="background-color:skyblue">
+    <div class="mainhead" data-role="header" data-position="fixed">
 
         <h1>질문등록</h1>
         <a href="#mainpage1" class="ui-btn ui-btn-left ui-corner-all ui-shadow" data-transition="slide" data-direction="reverse">Back</a>
@@ -117,7 +117,7 @@
 
 <!-- 메인화면2 적립금랭킹-->
 <div data-role="page" id="mainpage2">
-    <div class="mainhead" data-role="header" data-position="fixed" style="background-color:skyblue"> <h1>궁금하면 물어보세요! </h1>
+    <div class="mainhead" data-role="header" data-position="fixed"> <h1>궁금하면 물어보세요! </h1>
         <a href="#myinfo" class="ui-btn ui-btn-right ui-corner-all ui-shadow" data-transition="slide">My</a>
         <div data-role="navbar">
             <ul>
@@ -135,7 +135,7 @@
 
 <!-- 메인화면3 기프티콘샵-->
 <div data-role="page" id="mainpage3">
-    <div class="mainhead" data-role="header" data-position="fixed" style="background-color:skyblue" > <h1>궁금하면 물어보세요! </h1>
+    <div class="mainhead" data-role="header" data-position="fixed"> <h1>궁금하면 물어보세요! </h1>
         <a href="#myinfo" class="ui-btn ui-btn-right ui-corner-all ui-shadow" data-transition="slide">My</a>
         <div data-role="navbar">
             <ul>
@@ -218,7 +218,7 @@
 
 
   <!-- 로그인 창 -->
-    <div data-role="header" style="background-color:skyblue" >
+    <div data-role="header">
         <a href="#mainpage1" class="ui-btn ui-corner-all ui-shadow" data-transition="slide" data-direction="reverse">Back</a>
         <h1>마이페이지</h1>
         <a href="#notice" class="ui-btn ui-corner-all ui-shadow" data-transition="slide">Notice</a>
@@ -238,7 +238,7 @@
 
 
 <div class="ui-grid-b">
-      
+      <div class="ggg"><span>내가한 질문</span></div>
       <div class="ggg"><span>적립금</span></div>
       
     </div>
@@ -254,7 +254,7 @@
 
 <!-- 회원가입 -->
 <div data-role="page" id="signup">
-    <div class="mainhead" data-role="header" data-position="fixed" style="background-color:skyblue">
+    <div class="mainhead" data-role="header" data-position="fixed">
 
         <h1>회원가입</h1>
         <a href="#myinfo" class="ui-btn ui-btn-left ui-corner-all ui-shadow" data-transition="slide" data-direction="reverse">Back</a>
@@ -277,7 +277,7 @@
 
 <!-- 문의하기 -->
 <div data-role="page" id="faq">
-    <div class="mainhead" data-role="header" data-position="fixed" style="background-color:skyblue;">
+    <div class="mainhead" data-role="header" data-position="fixed" style="background-color:red;">
 
         <h1>문의하기</h1>
         <a href="#myinfo" class="ui-btn ui-btn-left ui-corner-all ui-shadow" data-transition="slide" data-direction="reverse">Back</a>
@@ -300,7 +300,7 @@
 
 <!-- 공지사항 -->
 <div data-role="page" id="notice">
-    <div data-role="header" style="background-color:skyblue">
+    <div data-role="header">
         <a href="#myinfo" class="ui-btn ui-corner-all ui-shadow" data-transition="slide" data-direction="reverse">Back</a>
         <h1>소식</h1>
     </div>

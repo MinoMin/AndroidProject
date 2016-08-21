@@ -11,16 +11,56 @@ var bodyParser = require('body-parser');
 var nodemailer = require("nodemailer");
 var mysql = require('mysql');
 var session = require('express-session');
+var fs = require('fs');
+
+var FCM = require('fcm').FCM;
+var apiKey = 'AIzaSyBflQ6np9ZMIRkoEN22W7dSS5fJPgVqRPA';
+var fcm = new FCM(apiKey);
 
 
+
+app.get('/endpoint', function(request, response) {
+    var id = request.query.id;
+    response.end("I have received the ID: " + id);
+    console.log("id is "+id);
+    
+var message = {
+    registration_id: id, // required
+    collapse_key: 'Collapse key',
+    data: 'this is fcm test',
+    data2: 'this is data2 war !'
+};
+
+fcm.send(message, function(err, messageId){
+    if (err) {
+        console.log("Something has gone wrong!");
+    } else {
+        console.log("Sent with message ID: ", messageId);
+    }
+});
+
+});
+
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+/*
+app.get('/', function(req, res){
+res.render('index', function(error, data){
+  if(error){
+    console.log(error);
+  }else{
+
+  }
+});
+
+});*/
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
 server.listen(3000);
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -51,7 +91,7 @@ app.get('/send',function(req,res){
 var mailOptions = {
     from: 'ddd',
     to: 'hmh0858@nate.com',
-    subject: "고정제목",
+    subject: "궁물 문의할게요!!!",
     text: '흠',
     html: req.query.text
 };
@@ -206,6 +246,7 @@ app.use(session({
 }))
 
 
+
 // 로그인 시키기
 app.post('/login',function(req,res){
   var email = req.body.email;
@@ -247,6 +288,41 @@ connection.end();
 });
 
 
+/*
+app.post('/sum',function(req,res){
+
+
+var email = req.body.email; 
+var connection = mysql.createConnection({
+  host : 'localhost',
+  user : 'root',
+  password : 'kitri',
+  database : 'project'
+});
+
+connection.connect();
+
+connection.query('SELECT count(*) cnt from ask where email = ?', [email], function(err, rows, fields) {
+  if (!err){
+    var cnt = rows[0].cnt;
+    
+    console.log(cnt);
+    
+  res.end(cnt);
+
+}else{
+  res.end("no");
+  }
+
+});
+connection.end();
+
+  
+
+});
+
+*/
+
 
 
 
@@ -265,11 +341,11 @@ if(err) console.error('err', err);
 // 질문할때 로그인 안돼있으면 못가게 체크
 app.post('/checkask',function(req,res){
 if(req.session.email){
-  //console.log(req.session.email);
-  res.end("ok")
+  console.log("질문등록 오케이 ");
+  res.end(req.session.email)
 
 }else{
-//console.log(req.session.email);
+console.log("질문등록 노");
   res.end("no")
   
 }
@@ -280,11 +356,11 @@ if(req.session.email){
 // 질문하는 방 들어갈때 로그인 안돼있으면 못가게 체크
 app.post('/checkjoinask',function(req,res){
 if(req.session.email){
-  //console.log(req.session.email);
-  res.end("ok")
+  console.log("질문체크 오케이");
+  res.end(req.session.email)
 
 }else{
-//console.log(req.session.email);
+console.log("질무문체크 노노");
   res.end("no")
   
 }
@@ -306,13 +382,15 @@ var connection = mysql.createConnection({
 
 connection.connect();
 
-connection.query('insert into ask values(?, ?)', [req.session.email, roomname], function(err, rows, fields) {
+connection.query('insert into ask(email, subject) values(?, ?)', [req.session.email, roomname], function(err, rows, fields) {
   if (!err){
   
-  console.log("성공");  
+  console.log("삽입성공");  
+  res.end("ok")
 
 }else{
   console.log("실패");
+  res.end("no")
   }
 
 });
@@ -320,20 +398,6 @@ connection.end();
 
 });
 
-
-app.post('/checkwho',function(req,res){
-if(req.session.email){
-  console.log(req.session.email);
-  res.end("ok")
-
-}else{
-console.log(req.session.email);
-  res.end("no")
-  
-}
-
-
-});
 
 
 
@@ -348,7 +412,10 @@ var rooms = [];
 var count = 0;
 
 
+
 io.sockets.on('connection', function (socket) {
+
+console.log("새접속자 올때마다 뜨나");
  
   // when the client emits 'adduser', this listens and executes
     socket.on('adduser', function(username){
@@ -389,23 +456,48 @@ io.sockets.on('connection', function (socket) {
   }
   });
 
-/*
-
-// 저장정보 저장
-socket.on('saveask', function (datav) {
-    
-
-
-
-
-
-  });
-*/
-
 
 //////0819수정
 /////////////////////////// 내가만듦
-  socket.on('makingask', function (datav) {
+  socket.on('makingask', function (datav, datan) {
+var connection = mysql.createConnection({
+  host : 'localhost',
+  user : 'root',
+  password : 'kitri',
+  database : 'project'
+});
+
+connection.connect();
+
+connection.query('SELECT count(*) cnt from ask where email = ? and subject = ?', [datan, datav], function(err, rows, fields) {
+  if (!err){
+    var cnt = rows[0].cnt;   
+console.log(cnt);    
+    
+    if(cnt == 1){           
+
+console.log("질문자가 접속하는거다 메킹에서");
+/*
+connection.query('update ask set me = on where subject = ?', [datav], function(err, rows, fields) {
+  if (!err){}
+});
+*/
+
+}else{
+  console.log("d안되나 ?????");
+  
+
+
+  }
+}else{
+    console.log('Error while performing Query.');
+  }
+});
+connection.end();
+
+
+socket.emit('changebutton');
+    
     socket.broadcast.to(socket.room).emit('updatechat', 'SERVER', socket.username+' has connected to this room');
     var j = 0;
     socket.room = datav;
@@ -426,7 +518,7 @@ socket.on('saveask', function (datav) {
     }
     // socket.join(datav);
     // echo to client they've connected
-    socket.emit('updatechat', 'SERVER', 'you have connected to create room!');
+    socket.emit('updatechat', 'SERVER', '답변자가 들어오길 기도합시다!');
     socket.join(datav);
     // echo to room 1 that a person has connected to their room         username +
     // socket.broadcast.to(socket.room).emit('updatechat', 'SERVER', socket.username+' has connected to this room');
@@ -451,21 +543,88 @@ socket.on('saveask', function (datav) {
 //////0819수정
 //socket.room은 현재방이얌
 //업데이트룸      ///////////수정헀음 오류고치기위해서(새로고침 후에 같은 방 또 누르면 생겼던 에러)
-  socket.on('switchRoom', function(newroom){
+  socket.on('switchRoom', function(newroom, datan){
     if(newroom == socket.room){
+
+var connection = mysql.createConnection({
+  host : 'localhost',
+  user : 'root',
+  password : 'kitri',
+  database : 'project'
+});
+
+connection.connect();
+
+connection.query('SELECT count(*) cnt from ask where email = ? and subject = ?', [datan, newroom], function(err, rows, fields) {
+  if (!err){
+    var cnt = rows[0].cnt;   
+    
+    if(cnt == 1){      
+      
+console.log("질문자가 접속하는거다 방바꾸는거 위에거 ");
+
+socket.emit('changebutton');
+
+}else{
+  
+socket.emit('hidebutton');
+
+  }
+}else{
+    console.log('Error while performing Query.');
+  }
+});
+connection.end();
+
+
+
       socket.join(socket.room);
-      socket.broadcast.to(socket.room).emit('updatechat', 'SERVER', socket.username+' has left this room');
-      io.sockets.in(socket.room).emit('updatechat', 'SERVER', socket.username+' has joined this room');
+      socket.broadcast.to(socket.room).emit('updatechat', 'SERVER', socket.username+' 님이 방을 떠나셨습니다.');
+      io.sockets.in(socket.room).emit('updatechat', 'SERVER', socket.username+' 님이 접속 하였습니다.');
       socket.emit('updaterooms', rooms, socket.room);
     }else{
+
+
+
+
+var connection = mysql.createConnection({
+  host : 'localhost',
+  user : 'root',
+  password : 'kitri',
+  database : 'project'
+});
+
+connection.connect();
+
+connection.query('SELECT count(*) cnt from ask where email = ? and subject = ?', [datan, newroom], function(err, rows, fields) {
+  if (!err){
+    var cnt = rows[0].cnt;   
+    
+    if(cnt == 1){      
+      
+console.log("질문자가 접속하는거다 방바꾸는거 아래꺼");
+
+}else{
+  socket.emit('hidebutton');
+
+
+  }
+}else{
+    console.log('Error while performing Query.');
+  }
+});
+connection.end();
+
+
+
     socket.leave(socket.room);
     socket.join(newroom);
-    socket.emit('updatechat', 'SERVER', 'you have connected to '+ newroom);
+    socket.emit('updatechat', 'SERVER', '당신은 '+ newroom+'질문에 접속하였습니다.');
     // sent message to OLD room
-    socket.broadcast.to(socket.room).emit('updatechat', 'SERVER', socket.username+' has left this room');
+    socket.broadcast.to(socket.room).emit('updatechat', 'SERVER', socket.username+' 님이 방을 나가셨습니다.');
     // update socket session room title
     socket.room = newroom;
-    socket.broadcast.to(newroom).emit('updatechat', 'SERVER', socket.username+' has joined this room');
+    socket.broadcast.to(newroom).emit('updatechat', 'SERVER', socket.username+' 님이 들어오셨습니다.');
     socket.emit('updaterooms', rooms, newroom);
   }
   });//broadcast
